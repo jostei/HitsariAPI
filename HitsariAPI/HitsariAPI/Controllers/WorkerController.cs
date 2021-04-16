@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HitsariAPI.Models;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace HitsariAPI.Controllers
 {
@@ -37,8 +39,15 @@ namespace HitsariAPI.Controllers
         public void AddWorker([FromBody] Worker tyomies)
         {
             HitsaritContext konteksti = new();
-            konteksti.Workers.Add(tyomies);
-            konteksti.SaveChanges();
+            try
+            { 
+                konteksti.Workers.Add(tyomies);
+                konteksti.SaveChanges();
+            }
+            catch(DbUpdateException e)
+            {
+                Console.WriteLine("Työntekijän lisäys epäonnistui! Message: "+e.Message);
+            }
         }
     }
 }
