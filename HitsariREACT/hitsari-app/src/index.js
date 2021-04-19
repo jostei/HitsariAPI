@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import ApiConnect from './ApiConnect';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
+    {/* yhteys localhostiin ei toimi oletuksena !*/}
+    <ApiConnect url="https://localhost:44317/api/workers/tolist" />
   </React.StrictMode>,
   document.getElementById('root')
 );
