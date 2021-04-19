@@ -19,9 +19,10 @@ namespace HitsariAPI.Controllers
         [Route("getSertificates/{id}")]
         public List<Sertifikaatit> GetCertificates(string id)
         {
-            HitsaritContext konteksti = new();
-            Worker w = konteksti.
-            return konteksti.Workers.Where(Worke).ToList();
+            //HitsaritContext konteksti = new();
+            //Worker w = konteksti.
+            //return konteksti.Workers.Where(Worke).ToList();
+            return null;
         }
     }
 }
