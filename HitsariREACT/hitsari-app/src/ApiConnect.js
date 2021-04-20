@@ -48,13 +48,12 @@ class ApiConnect extends React.Component{
             for (let indeksi = 0; indeksi < this.state.entryt.length; indeksi++) {
                 const otsikko = entryt[indeksi].WorkerId;
                 otsikot.push(<p key={indeksi}>{otsikko}</p>)
-
             }
         }
 
         return <>
             <div>
-                <h1>Löydetyt hitsarit</h1>
+                <h1>Löydetyt hitsarit:</h1>
                 {otsikot}
             </div>
             </>

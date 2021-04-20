@@ -31,8 +31,20 @@ namespace HitsariAPI.Controllers
         [Route("getExpiringCertificates")]
         public List<Sertifikaatit> GetExpiringCertificates()
         {
+            var minVoimassa = 1; // Määrää monenko kuukauden päästä vanhentuvat listataan
             HitsaritContext konteksti = new();
-            return konteksti.Sertifikaatits.Where(c => c.Voimassa < DateTime.Now.AddMonths(1) ).ToList();
+            return konteksti.Sertifikaatits.Where(c => c.Voimassa < DateTime.Now.AddMonths(minVoimassa) ).ToList();
+        }
+
+        // /api/getCertificates GET
+        // Hae työntekijän vanhentuvat sertifikaatit
+        [HttpGet]
+        [Route("getExpiringCertificates/{workerid}")]
+        public List<Sertifikaatit> GetExpiringCertificates(string workerid)
+        {
+            var minVoimassa = 1; // Määrää monenko kuukauden päästä vanhentuvat listataan
+            HitsaritContext konteksti = new();
+            return konteksti.Sertifikaatits.Where(c => (c.Voimassa < DateTime.Now.AddMonths(minVoimassa) && c.SertifikaatinHaltija == workerid)).ToList();
         }
 
         // /api/addCertificate POST JSON
