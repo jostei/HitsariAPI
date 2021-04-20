@@ -76,7 +76,7 @@ namespace HitsariAPI.Controllers
                 // Kirjoitetaan seuraava viesti tiedostoon uudelle riville
                 using (StreamWriter sw = System.IO.File.AppendText(logFilePath))
                 {
-                    sw.WriteLine(DateTime.Now.ToString() + "  Sertifikaatin lisäys epäonnistui! Message: " + e.Message);
+                    sw.WriteLine(DateTime.Now.ToString() + "  Sertifikaatin lisäys epäonnistui! Message:\n" + e.GetBaseException().ToString() + "\n");
                 }
             }
         }
