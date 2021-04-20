@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HitsariAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors;
 using System.IO;
 
 namespace HitsariAPI.Controllers
@@ -16,7 +17,9 @@ namespace HitsariAPI.Controllers
     public class WorkerController : ControllerBase
     {
         // /api/workers GET
+        // Hakee kaikki työntekijät
         [HttpGet]
+        [EnableCors]
         [Route("tolist")]
         public List<Worker> GetWorkers()
         {
@@ -25,6 +28,7 @@ namespace HitsariAPI.Controllers
         }
 
         // /api/workers/{workerId} GET
+        // Hakee työntekijän annetun ID:n perusteella
         [HttpGet]
         [Route("{id}")]
         public List<Worker> GetWorker(string id)
@@ -34,19 +38,36 @@ namespace HitsariAPI.Controllers
         }
 
         // /api/addWorker POST JSON
+        // Lisää tietokantaan uuden työntekijän
         [HttpPost]
         [Route("addWorker")]
         public void AddWorker([FromBody] Worker tyomies)
         {
             HitsaritContext konteksti = new();
+            // Lisätään työntekijä jos ei virheitä
             try
-            { 
+            {
                 konteksti.Workers.Add(tyomies);
                 konteksti.SaveChanges();
             }
-            catch(DbUpdateException e)
+            // Napataan exception ja kirjoitetaan viesti lokitiedostoon
+            catch (DbUpdateException e)
             {
-                Console.WriteLine("Työntekijän lisäys epäonnistui! Message: "+e.Message);
+                Console.WriteLine("Työntekijän lisäys epäonnistui! Message: " + e.Message);
+                string logFilePath = @".\Logs\addWorkerExceptionLog.txt";
+                if (!System.IO.File.Exists(logFilePath))
+                {
+                    // Luodaan tiedosto jos sitä ei ole
+                    using (StreamWriter sw = System.IO.File.CreateText(logFilePath))
+                    {
+                        sw.WriteLine("Loki Luotu "+DateTime.Now+"\n\n------------------------------------------");                                                                                                                                   
+                    }
+                }
+                // Kirjoitetaan seuraava viesti tiedostoon uudelle riville
+                using (StreamWriter sw = System.IO.File.AppendText(logFilePath))
+                {
+                    sw.WriteLine(DateTime.Now.ToString()+"  Työntekijän lisäys epäonnistui! Message: " + e.Message);
+                }
             }
         }
     }

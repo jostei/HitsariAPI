@@ -15,6 +15,7 @@ namespace HitsariAPI.Controllers
     public class SertifikaatitController : ControllerBase
     {
         // /api/getSertificates GET
+        // Hae yksittäisen työntekijän sertifikaatit
         [HttpGet]
         [Route("getSertificates/{id}")]
         public List<Sertifikaatit> GetCertificates(string id)
