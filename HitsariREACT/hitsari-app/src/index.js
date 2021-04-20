@@ -9,7 +9,7 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
     {/* yhteys localhostiin ei toimi oletuksena !*/}
-    <ApiConnect url="https://localhost:44317/api/workers/tolist" />
+    <ApiConnect url="https://localhost:44317/api/Workers/tolist" />
   </React.StrictMode>,
   document.getElementById('root')
 );

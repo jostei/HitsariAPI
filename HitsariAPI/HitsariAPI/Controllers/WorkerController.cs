@@ -12,14 +12,14 @@ using System.IO;
 namespace HitsariAPI.Controllers
 {
     // /api/workers
-    [Route("api/workers")]
+    [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
     public class WorkerController : ControllerBase
     {
         // /api/workers GET
         // Hakee kaikki työntekijät
         [HttpGet]
-        [EnableCors]
         [Route("tolist")]
         public List<Worker> GetWorkers()
         {
@@ -53,14 +53,14 @@ namespace HitsariAPI.Controllers
             // Napataan exception ja kirjoitetaan viesti lokitiedostoon
             catch (DbUpdateException e)
             {
-                Console.WriteLine("Työntekijän lisäys epäonnistui! Message: " + e.Message);
                 string logFilePath = @".\Logs\addWorkerExceptionLog.txt";
                 if (!System.IO.File.Exists(logFilePath))
                 {
                     // Luodaan tiedosto jos sitä ei ole
                     using (StreamWriter sw = System.IO.File.CreateText(logFilePath))
                     {
-                        sw.WriteLine("Loki Luotu "+DateTime.Now+"\n\n------------------------------------------");                                                                                                                                   
+                        sw.WriteLine("------------------------------------------\n\nLoki Luotu " + DateTime.Now
+                            + "\n\n------------------------------------------\n");                                                                                                                                   
                     }
                 }
                 // Kirjoitetaan seuraava viesti tiedostoon uudelle riville
