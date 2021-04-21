@@ -34,16 +34,14 @@ class ApiConnect extends React.Component{
             });
         */
 
-        let tulokset = [];
-
-        fetch("https://jsonplaceholder.typicode.com/users")
+            // testaukseen "https://jsonplaceholder.typicode.com/users"
+        fetch("https://localhost:44317/api/Sertifikaatit/getExpiringCertificates")
             .then(response => response.json())
             .then(tulos => {
-                tulokset.push(tulos[0].username);
-        
+                console.log(tulos);
                 // Päivitetään tila
                 console.log("Päivitetään tila")
-                this.setState( {entryt : tulokset });
+                this.setState( {entryt : tulos });
                 console.log("Tila päivitetty");
             });
     }
@@ -52,33 +50,40 @@ class ApiConnect extends React.Component{
     render(){
         console.log("ApiConnect.render");
 
-        /*
-        console.log("staten arvo: "+this.state.entryt)
-        const otsikot = [];
-        if(this.state.entryt){
+        const taulukko = [];
+        if (this.state.entryt) {
 
             const entryt = this.state.entryt;
-            console.log("this.state muuta kuin null, pituus: "+this.state.entryt.length)
-            console.log("staten ekan title "+this.state.entryt[0].title)
+            console.log("ApiConnect.render --> tila alustettu: " + entryt.length);
 
-            for (let indeksi = 0; indeksi < this.state.entryt.length; indeksi++) {
-                const otsikko = entryt[indeksi].WorkerId;
-                otsikot.push(<p key={indeksi}>{otsikko}</p>)
+            for (let indeksi = 0; indeksi < entryt.length; indeksi++) {
+                const entry = entryt[indeksi];
+                taulukko.push(<tr key={indeksi}>
+                    <td>{entry.certificateId}</td>
+                    <td>{entry.sertifikaatinHaltija}</td>
+                    <td>{entry.myönnetty}</td>
+                    <td>{entry.voimassa}</td>
+                    <td>{entry.pätevyys}</td>
+                </tr>)
             }
         }
-        
+
         return <>
-            <div>
-                <h1>Löydetyt hitsarit:</h1>
-                {otsikot}
-            </div>
-            </>
-        */
-        return <>
-            <div>
-                <h1>Löydetty username:</h1>
-                {this.state.entryt}
-            </div>
+             <h1>Löydettyt sertifikaatit</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Certificate Id</th>
+                        <th>Sertifikaatin haltija</th>
+                        <th>Myönnetty</th>
+                        <th>Voimassa</th>
+                        <th>Pätevyys</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {taulukko}
+                </tbody>
+            </table>
             </>
     }
 }
