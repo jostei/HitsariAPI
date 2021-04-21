@@ -27,7 +27,19 @@ namespace HitsariAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            // CORS testiä, poista kuna valmis
+            //----------------------------------------------------------------
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                        .WithOrigins("http://localhost:3000/")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+            //----------------------------------------------------------------
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -46,8 +58,13 @@ namespace HitsariAPI
             }
 
             app.UseHttpsRedirection();
-
+            
             app.UseRouting();
+
+            // CORS testiä, poista kun valmis
+            //----------------------------------------------------------------
+            app.UseCors("CorsPolicy");
+            //----------------------------------------------------------------
 
             app.UseAuthorization();
 

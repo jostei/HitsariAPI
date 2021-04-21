@@ -14,6 +14,7 @@ class ApiConnect extends React.Component{
     componentDidMount(){
         console.log("ApiConnect.componentDidMount");
 
+        /*
         fetch(this.props.url)
             .then(response => response.json())
             .then(json => {
@@ -31,12 +32,27 @@ class ApiConnect extends React.Component{
                 this.setState( {entryt : tulokset });
                 console.log("Tila päivitetty");
             });
+        */
+
+        let tulokset = [];
+
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then(response => response.json())
+            .then(tulos => {
+                tulokset.push(tulos[0].username);
+        
+                // Päivitetään tila
+                console.log("Päivitetään tila")
+                this.setState( {entryt : tulokset });
+                console.log("Tila päivitetty");
+            });
     }
 
     // Suoritetaan alussa kerran, ja uudestaan aina kun tila päivitetään
     render(){
         console.log("ApiConnect.render");
 
+        /*
         console.log("staten arvo: "+this.state.entryt)
         const otsikot = [];
         if(this.state.entryt){
@@ -50,11 +66,18 @@ class ApiConnect extends React.Component{
                 otsikot.push(<p key={indeksi}>{otsikko}</p>)
             }
         }
-
+        
         return <>
             <div>
                 <h1>Löydetyt hitsarit:</h1>
                 {otsikot}
+            </div>
+            </>
+        */
+        return <>
+            <div>
+                <h1>Löydetty username:</h1>
+                {this.state.entryt}
             </div>
             </>
     }
