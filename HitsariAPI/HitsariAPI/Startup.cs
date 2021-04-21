@@ -11,12 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 
 namespace HitsariAPI
 {
     public class Startup
     {
-
+        string corsPolicyName = "CorsPolicy";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,12 +32,12 @@ namespace HitsariAPI
             //----------------------------------------------------------------
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
+                options.AddPolicy(corsPolicyName,
                     builder => builder
-                        .WithOrigins("http://localhost:3000/")
+                        .WithOrigins("http://localhost:3000")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials());
+                        .AllowCredentials()); ;
             });
             //----------------------------------------------------------------
 
@@ -63,7 +64,7 @@ namespace HitsariAPI
 
             // CORS testiä, poista kun valmis
             //----------------------------------------------------------------
-            app.UseCors("CorsPolicy");
+            app.UseCors(corsPolicyName);
             //----------------------------------------------------------------
 
             app.UseAuthorization();
