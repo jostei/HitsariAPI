@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: center;
 }
 
 code {
@@ -12,10 +13,15 @@ code {
     monospace;
 }
 
+table {
+  width: 90%;
+}
 
 table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
 }
 th, td {
   padding: 15px;
