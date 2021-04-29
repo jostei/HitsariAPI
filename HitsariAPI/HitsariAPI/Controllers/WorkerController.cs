@@ -8,6 +8,7 @@ using HitsariAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Cors;
 using System.IO;
+using System.Web;
 
 namespace HitsariAPI.Controllers
 {
@@ -47,6 +48,7 @@ namespace HitsariAPI.Controllers
             // Lisätään työntekijä jos ei virheitä
             try
             {
+                tyomies.Muokattu = DateTime.Now;
                 konteksti.Workers.Add(tyomies);
                 konteksti.SaveChanges();
             }
@@ -70,5 +72,75 @@ namespace HitsariAPI.Controllers
                 }
             }
         }
+
+        // /api/deleteWorker/{workerid} REMOVE
+        // Poistaa työntekijän annetun WrokerIdn perusteella
+        [HttpDelete]
+        [Route("deleteWorker/{workerid}")]
+        public void DeleteWorker(string workerid)
+        {
+            HitsaritContext konteksti = new();
+            try
+            {
+                var tyomies = new Worker
+                {
+                    WorkerId = workerid
+                };
+                konteksti.Remove(tyomies);
+                konteksti.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                string logFilePath = @".\Logs\deleteWorkerExceptionLog.txt";
+                if (!System.IO.File.Exists(logFilePath))
+                {
+                    // Luodaan tiedosto jos sitä ei ole
+                    using (StreamWriter sw = System.IO.File.CreateText(logFilePath))
+                    {
+                        sw.WriteLine("------------------------------------------\n\nLoki Luotu " + DateTime.Now
+                            + "\n\n------------------------------------------\n");
+                    }
+                }
+                // Kirjoitetaan seuraava viesti tiedostoon uudelle riville
+                using (StreamWriter sw = System.IO.File.AppendText(logFilePath))
+                {
+                    sw.WriteLine(DateTime.Now.ToString() + "  Työntekijän poisto epäonnistui! Message: " + e.ToString());
+                }
+            }
+        }
+        
+        // /api/updateWorker/{workerid} UPDATE JSON
+        // Päivittää uudet tiedot Workerille
+        [HttpPut]
+        [Route("updateWorker")]
+        public void UpdateWorker([FromBody] Worker tyomies)
+        {
+            try
+            {
+                HitsaritContext konteksti = new();
+                tyomies.Muokattu = DateTime.Now;
+                konteksti.Update(tyomies);
+                konteksti.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                string logFilePath = @".\Logs\addWorkerExceptionLog.txt";
+                if (!System.IO.File.Exists(logFilePath))
+                {
+                    // Luodaan tiedosto jos sitä ei ole
+                    using (StreamWriter sw = System.IO.File.CreateText(logFilePath))
+                    {
+                        sw.WriteLine("------------------------------------------\n\nLoki Luotu " + DateTime.Now
+                            + "\n\n------------------------------------------\n");
+                    }
+                }
+                // Kirjoitetaan seuraava viesti tiedostoon uudelle riville
+                using (StreamWriter sw = System.IO.File.AppendText(logFilePath))
+                {
+                    sw.WriteLine(DateTime.Now.ToString() + "  Työntekijän päivitys epäonnistui! Message: " + e.ToString());
+                }
+            }
+        }
+        
     }
 }

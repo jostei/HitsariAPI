@@ -80,5 +80,73 @@ namespace HitsariAPI.Controllers
                 }
             }
         }
+
+        // /api/deleteCertificate/{workerid}/{certificateid} REMOVE
+        // Poistaa sertifikaatin annetun WrokerIdn ja CertificateIdn perusteella
+        [HttpDelete]
+        [Route("deleteCertificate/{workerid}/{certificateid}")]
+        public void DeleteCertificate(string workerid, string certificateid)
+        {
+            HitsaritContext konteksti = new();
+            try
+            {
+                var sert = new Sertifikaatit {
+                    CertificateId = certificateid,
+                    SertifikaatinHaltija = workerid
+                };
+                konteksti.Remove(sert);
+                konteksti.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                string logFilePath = @".\Logs\deleteCertificateExceptionLog.txt";
+                if (!System.IO.File.Exists(logFilePath))
+                {
+                    // Luodaan tiedosto jos sitä ei ole
+                    using (StreamWriter sw = System.IO.File.CreateText(logFilePath))
+                    {
+                        sw.WriteLine("------------------------------------------\n\nLoki Luotu " + DateTime.Now
+                            + "\n\n------------------------------------------\n");
+                    }
+                }
+                // Kirjoitetaan seuraava viesti tiedostoon uudelle riville
+                using (StreamWriter sw = System.IO.File.AppendText(logFilePath))
+                {
+                    sw.WriteLine(DateTime.Now.ToString() + "  Sertifikaatin poisto epäonnistui! Message:\n" + e.GetBaseException().ToString() + "\n");
+                }
+            }
+        }
+
+        // /api/updateCertificate/{certificateid} UPDATE JSON
+        // Päivittää uudet tiedot sertifikaatille
+        [HttpPut]
+        [Route("updateCertificate")]
+        public void UpdateCertificate([FromBody] Sertifikaatit sert)
+        {
+            try
+            {
+            HitsaritContext konteksti = new();
+            konteksti.Update(sert);
+            konteksti.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                string logFilePath = @".\Logs\updateCertificateExceptionLog.txt";
+                if (!System.IO.File.Exists(logFilePath))
+                {
+                    // Luodaan tiedosto jos sitä ei ole
+                    using (StreamWriter sw = System.IO.File.CreateText(logFilePath))
+                    {
+                        sw.WriteLine("------------------------------------------\n\nLoki Luotu " + DateTime.Now
+                            + "\n\n------------------------------------------\n");
+                    }
+                }
+                // Kirjoitetaan seuraava viesti tiedostoon uudelle riville
+                using (StreamWriter sw = System.IO.File.AppendText(logFilePath))
+                {
+                    sw.WriteLine(DateTime.Now.ToString() + "  Sertifikaatin päivitys epäonnistui! Message:\n" + e.GetBaseException().ToString() + "\n");
+                }
+            }
+        }
     }
 }
