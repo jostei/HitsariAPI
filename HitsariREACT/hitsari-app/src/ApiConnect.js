@@ -19,7 +19,7 @@ class ApiConnect extends React.Component{
             .then(tulos => {
                 console.log(tulos);
                 // Päivitetään tila
-                console.log("Päivitetään tila")
+                console.log("Päivitetään sertit")
                 this.setState( {sertit : tulos });
                 console.log("Tila päivitetty");
             });
@@ -33,19 +33,20 @@ class ApiConnect extends React.Component{
 
         if (this.state.sertit) {
             const sertit = this.state.sertit;
-            console.log("ApiConnect.render --> tila alustettu: " + sertit.length);
+            console.log("ApiConnect.render --> tila alustettu, sertit.length: " + sertit.length);
 
             for (let indeksi = 0; indeksi < sertit.length; indeksi++) {
                 const sert = sertit[indeksi];
                 taulukko.push(<tr key={indeksi}>
                     <td>{sert.certificateId}</td>
                     <td>{sert.sertifikaatinHaltija}</td>
-                    <td>{sert.myönnetty}</td>
-                    <td>{sert.voimassa}</td>
+                    <td>{sert.myönnetty.toString("dd/MM/yyyy")}</td>
+                    <td>{sert.voimassa.toString("dd/MM/yyyy")}</td>
                     <td>{sert.pätevyys}</td>
                 </tr>)
             }
         }
+
 
         return <>
             <h1>Löydettyt sertifikaatit</h1>

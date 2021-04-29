@@ -4,12 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ApiConnect from './ApiConnect';
+import ApiWorkerit from './ApiWorkerit';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
     {/* yhteys localhostiin ei toimi oletuksena !*/}
-    <ApiConnect url="https://localhost:44317/api/Workers/tolist" />
+    <ApiConnect/>
+    <ApiWorkerit/>
   </React.StrictMode>,
   document.getElementById('root')
 );
